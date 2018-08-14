@@ -44,9 +44,16 @@ namespace PCObserverAdmin
             textBox1.AppendText(isListenin ? begin : "server stop!\n");
             if (isListenin)
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://127.0.0.1:8080/admin.php");
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                Stream stream = response.GetResponseStream();
+                string res = comboBox1.Text;
+                //Console.WriteLine(res.CompareTo("白名单模式"));//黑1 白0
+                if (res.CompareTo("白名单模式") == 1) res = "blacklist_mode";
+                else res = "whitelist_mode";
+                Console.WriteLine(res);
+                HttpWebRequest request_config = (HttpWebRequest)WebRequest.Create("http://localhost:8000/config.php?mode="+res);
+                HttpWebResponse response_config = (HttpWebResponse)request_config.GetResponse();
+                HttpWebRequest request_admin = (HttpWebRequest)WebRequest.Create("http://localhost:8000/admin.php?mode="+res);
+                HttpWebResponse response_admin = (HttpWebResponse)request_admin.GetResponse();
+                Stream stream = response_admin.GetResponseStream();
                 StringBuilder builder = new StringBuilder("\n");
                 byte[] buffer = new byte[1024];
                 int len;

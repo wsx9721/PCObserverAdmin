@@ -1,51 +1,52 @@
 <?php
 namespace app;
-// trait gg {
-//     public static function mm() {
-//         echo __TRAIT__;
-//         echo PHP_EOL;
-//         echo __FUNCTION__.PHP_EOL;
-//         echo "ll";
-//     }
-// }
-// trait ll {
-//     public $ll = 0;
-// }
-// class ff {
-//     use gg;
-//     use ll;
-//     private $dd = 8;
-//     public static function fuck() {
-//         echo __CLASS__ . PHP_EOL;
-//         echo __TRAIT__;
-//         echo "ttt";
-//     }
-// }
 
 
-//     // $mm = new ff();
-//     // echo $mm->fuck();
-//     // echo gg::mm();
+date_default_timezone_set('PRC');
 
-//     $class = new \ReflectionClass('ff');
-//     $properties = $class->getProperties();
-//     foreach($properties as $property) {
-//         echo $property->getName()."\n";
-//     }
 $mode = [
     0 => 'blacklist_mode',
     1 => 'whitelist_mode'
 ];
-if($_POST) {
-    $file = fopen("1.txt","a+");
+
+$cur_mode = file_get_contents('config_cur.txt');
+if(+strcmp($cur_mode,'blacklist_mode') === 0) {//blacklist_mode
+    $file = fopen("black_log.txt","a+");
     fwrite($file,date('Y-m-d H:i:s')."\r\n".
         $_POST["hostname"]."\r\n".
         $_POST["ip"]."\r\n".
         $_POST["guid"]."\r\n".
-        $mode[$_POST['mode']]."\r\n".
         $_POST["s"]."\r\n"
     );
     fclose($file);
+
+    $list_file = fopen("list_cur.txt","a+");
+    fwrite($list_file,date('Y-m-d H:i:s')."\r\n".
+        $_POST["hostname"]."\r\n".
+        $_POST["ip"]."\r\n".
+        $_POST["guid"]."\r\n".
+        $_POST["s"]."\r\n"
+    );
+    fclose($list_file);
+}
+else {//whitelist_mode
+    $file = fopen("white_log.txt","a+");
+    fwrite($file,date('Y-m-d H:i:s')."\r\n".
+        $_POST["hostname"]."\r\n".
+        $_POST["ip"]."\r\n".
+        $_POST["guid"]."\r\n".
+        $_POST["s"]."\r\n"
+    );
+    fclose($file);
+
+    $list_file = fopen("list_cur.txt","a+");
+    fwrite($list_file,date('Y-m-d H:i:s')."\r\n".
+        $_POST["hostname"]."\r\n".
+        $_POST["ip"]."\r\n".
+        $_POST["guid"]."\r\n".
+        $_POST["s"]."\r\n"
+    );
+    fclose($list_file);
 }
 
 
